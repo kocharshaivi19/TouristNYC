@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TouristNYC</string>
+    <string name="user_profile">User Details</string>
+    <string name="points_of_interest">Interests</string>
+    <string name="groups">Groups</string>
+    <string name="newtrip">New Trip</string>
 </resources>
