@@ -1,0 +1,4 @@
+COMMAND=PREPARE_LIBRARY
+FILE_PATH=/opt/Android/Sdk/extras/android/m2repository/com/android/support/recyclerview-v7/25.3.1/recyclerview-v7-25.3.1.aar
+FILE_SIZE=332746
+FILE_TIMESTAMP=1491244491000

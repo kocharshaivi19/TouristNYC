@@ -1,0 +1,4 @@
+COMMAND=PREPARE_LIBRARY
+FILE_PATH=/opt/Android/Sdk/extras/m2repository/com/android/support/constraint/constraint-layout/1.0.2/constraint-layout-1.0.2.aar
+FILE_SIZE=38176
+FILE_TIMESTAMP=1491244695000

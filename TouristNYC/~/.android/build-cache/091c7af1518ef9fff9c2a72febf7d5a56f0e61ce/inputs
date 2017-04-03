@@ -1,0 +1,4 @@
+COMMAND=PREPARE_LIBRARY
+FILE_PATH=/opt/Android/Sdk/extras/android/m2repository/com/android/support/support-v4/25.3.1/support-v4-25.3.1.aar
+FILE_SIZE=1762
+FILE_TIMESTAMP=1491244483000

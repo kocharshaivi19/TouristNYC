@@ -1,0 +1,7 @@
+COMMAND=PREDEX_LIBRARY
+FILE_PATH=/home/brian_chuk/Desktop/Projects/TouristNYC/TouristNYC/~/.android/build-cache/f1094ddf98d58e7851578d8d7e95357c25afb4d5/output/jars/classes.jar
+FILE_HASH=d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28
+BUILD_TOOLS_REVISION=25.0.2
+JUMBO_MODE=true
+OPTIMIZE=true
+MULTI_DEX=true

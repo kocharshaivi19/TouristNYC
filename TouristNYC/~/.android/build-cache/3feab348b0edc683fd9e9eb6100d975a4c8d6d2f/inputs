@@ -1,0 +1,4 @@
+COMMAND=PREPARE_LIBRARY
+FILE_PATH=/opt/Android/Sdk/extras/android/m2repository/com/android/support/support-media-compat/25.3.1/support-media-compat-25.3.1.aar
+FILE_SIZE=283505
+FILE_TIMESTAMP=1491244478000
