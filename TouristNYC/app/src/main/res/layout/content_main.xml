@@ -22,7 +22,7 @@
             android:layout_marginBottom="50dp">
 
             <LinearLayout
-                android:id="@+id/tab1"
+                android:id="@+id/explore"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#ffc916"
@@ -31,12 +31,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Explore" />
+                    android:text="Recommended"
+                    android:textSize="30sp" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/tab2"
+                android:id="@+id/trips"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#da8200"
@@ -45,11 +46,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="This is tab 2" />
+                    android:text="Planned trips"
+                    android:textSize="30sp" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/tab3"
+                android:id="@+id/profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#5b89ff"
@@ -58,7 +61,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="This is tab 3" />
+                    android:text="Brian Chuk"
+                    android:textSize="30sp" />
             </LinearLayout>
         </FrameLayout>
     </RelativeLayout>

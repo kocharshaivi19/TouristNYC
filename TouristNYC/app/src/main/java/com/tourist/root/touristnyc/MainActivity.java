@@ -24,19 +24,19 @@ public class MainActivity extends AppCompatActivity {
 
         //Tab 1
         TabHost.TabSpec spec = host.newTabSpec("Tab One");
-        spec.setContent(R.id.tab1);
+        spec.setContent(R.id.explore);
         spec.setIndicator("Tab One");
         host.addTab(spec);
 
         //Tab 2
         spec = host.newTabSpec("Tab Two");
-        spec.setContent(R.id.tab2);
+        spec.setContent(R.id.trips);
         spec.setIndicator("Tab Two");
         host.addTab(spec);
 
         //Tab 3
         spec = host.newTabSpec("Tab Three");
-        spec.setContent(R.id.tab3);
+        spec.setContent(R.id.profile);
         spec.setIndicator("Tab Three");
         host.addTab(spec);
     }
