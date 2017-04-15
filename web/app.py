@@ -1,31 +1,46 @@
 from flask import Flask, render_template, session, redirect, url_for
 app = Flask(__name__)
-
+app.config['DEBUG'] =True
 
 @app.route("/")
 def index():
 	return redirect(url_for('explore'));
 
 
-@app.route("/explore")
+@app.route("/explore",methods=['GET'])
 def explore():
     if 'username' in session:
     	return render_template("explore.html", username=session['username'])
     return render_template("explore.html", username=None)
 
-
-@app.route("/trips")
-def trips():
-    if 'username' in session:
-    	return render_template("trips.html", username=None)
-    return render_template("trips.html", username=session['username'])
-
-
-@app.route("/profile")
+@app.route("/profile",methods=['GET'])
 def profile():
     if 'username' in session:
-    	return render_template("trips.html", username=None)
-    return render_template("trips.html", username=session['username'])
+    	return render_template("profile.html", username=session['username'])
+    return render_template("profile.html", username=None)
+
+
+@app.route("/group",methods=['GET'])
+def group():
+    if 'username' in session:
+        return render_template("group.html", username=session['username'])
+    return render_template("group.html", username=None)
+
+
+@app.route("/trips",methods=['GET'])
+def trips():
+    if 'username' in session:
+        return render_template("trips.html", username=session['username'])
+    return render_template("trips.html", username=None)
+
+
+@app.route("/events",methods=['GET'])
+def events():
+    if 'username' in session:
+        return render_template("events.html", username=session['username'])
+    return render_template("events.html", username=None)
+
+
 
 
 # @app.route('/login', methods=['GET', 'POST'])
