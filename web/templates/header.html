@@ -1,0 +1,71 @@
+<!Doctype html>
+<html>
+	{% block head %}
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename= 'css/clean.css') }}" />
+		 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename= 'css/bootstrap.min.css') }}" />
+
+		<title>{% block title %}{% endblock %}</title>	
+		
+	</head>
+	{% endblock %}
+
+	{% block content %}
+				
+	
+	{% endblock %}
+
+	{% block body %}	
+	<body>
+	<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        	<span class="navbar-toggler-icon"></span>
+      	</button>
+      	<a class="navbar-brand" href="#">TouristNYC</a>
+      	<div class="collapse navbar-collapse" id="navbarCollapse">
+		<ul class="navbar-nav mr-auto">
+          		<li class="nav-item active">
+				<a class="nav-link" href="{{ url_for('profile') }}">PROFILE<span class="sr-only">(current)</span></a>
+          		</li>
+          		<li class="nav-item">
+           			 <a class="nav-link" href="{{ url_for('group') }}">GROUP</a>
+        	 	</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url_for('trips') }}">TRIPS</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url_for('events') }}">EVENTS</a>
+			</li>
+		</ul>
+
+		
+	</div>
+	</nav>	
+	
+	<div class="carousel-inner" role="listbox">
+        <div class="carousel-item active">
+          <img class="first-slide" src="{{ url_for('static',filename='photo/temporary.jpg') }}" alt="First slide">
+          <div class="container">
+            <div class="carousel-caption d-none d-md-block text-left">
+              <h1>Personalization to the People (P2P)</h1>
+              <p>Empower your trip with personalization.</p>
+              <p><a class="btn btn-lg btn-primary" href="#" role="button">LEARN MORE</a></p>
+            </div>
+          </div>
+        </div>	
+
+	</body>
+	{% endblock %}
+
+
+	{% block footer %}
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	{% endblock %}
+
+</html>
