@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">TouristNYC</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_launcher">TouristNYC</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="account_details">Account Details</string>
+    <string name="points_of_interest">Points of Interest</string>
+
 </resources>
