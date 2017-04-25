@@ -1,0 +1,146 @@
+{% extends "header.html" %}
+{% block title %}GROUPS{% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block body %}
+
+<div class="navbar-wrapper">
+      <div class="container">
+
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="{{ url_for('explore') }}">Tourist NYC</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('explore') }}">EXPLORE</a></li>
+                <li><a href="{{ url_for('profile') }}">PROFILE</a></li>
+                <li><a href="{{ url_for('trips') }}">TRIPS</a></li>
+                <li><a href="{{ url_for('events') }}">EVENTS</a></li>
+                <li class="active"><a href="{{ url_for('groups') }}">GROUPS</a></li>
+
+                <!-- <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MORE<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li class="dropdown-header">Advisor</li>
+                    <li><a href="#">Separated link</a></li>
+                    <li><a href="#">One more separated link</a></li>
+                  </ul>
+                </li> -->
+
+                <li><a href="{{ url_for('login') }}" style="margin-left: 40em">LOGIN</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+      </div>
+    </div>
+
+<div class="container" style="margin-top: 10em">
+  <div class="row">
+    <div class="row"> 
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <a href="#">
+                <img src="http://cdn1.listovative.com/wp-content/uploads/2016/03/547301-b1566610-773e-11e3-98ae-18260220474f.jpg" class="img-responsive img-box img-thumbnail"> 
+            </a>
+        </div> 
+        <div class="col-xs-12 col-sm-9 col-md-9">
+            <h4><a href="#">Friends</a></h4>
+            <h5>Members</h5>
+            <ul>
+              <li>Anna Brown (ab123)</li>
+              <li>Casey Donaldson (cd456)</li>
+              <li>Elena Fisher (ef789)</li>
+            </ul>
+        </div> 
+    </div>
+    <hr>
+
+    <div class="row"> 
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <a href="#">
+                <img src="https://s-media-cache-ak0.pinimg.com/originals/d6/3c/c4/d63cc434aec33221210259f785c8e380.jpg" class="img-responsive img-box img-thumbnail"> 
+            </a>
+        </div> 
+        <div class="col-xs-12 col-sm-9 col-md-9">
+            <h4><a href="#">Family</a></h4>
+            <h5>Members</h5>
+            <ul>
+              <li>Anna Brown (ab123)</li>
+              <li>Ciara Brown (cb456)</li>
+              <li>Darren Brown (db789)</li>
+            </ul>
+        </div> 
+    </div>
+    <hr>
+
+<p align="center"><a class="btn btn-lg btn-primary" data-toggle="modal" data-target="#myModal" role="button">CREATE NEW GROUP</a></p>
+</div>
+
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title" id="myModalLabel" align="center">Create New Group</h4>
+                    </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div class="form-group">
+                              <div class="col-md-4">
+                                <div class="input-group">
+                                   <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                   </div>
+                                   <input id="newgroupname" name="newgroupname" type="text" placeholder="Enter group name" class="form-control input-md">
+                                </div>    
+                              </div> 
+                            </div>
+                            <div class="form-group"> 
+                              <h5 style="margin-left: 15px"> Add Users: </h5> <!-- Can't get label to work properly here. -->
+                              <div class="col-md-4">                                
+                                <div class="input-group">
+                                   <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                   </div>
+
+                                   <select id="addusers" name="addusers">
+                                    <option selected></option>
+                                    <option value="bla">Dynamically populate with registered users as the user types.</option>
+                                  </select>
+                                </div>    
+                              </div> 
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <center>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Create</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block footer %} {{ super() }} {% endblock %}
+
