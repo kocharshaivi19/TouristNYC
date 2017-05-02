@@ -1,4 +1,0 @@
-COMMAND=PREPARE_LIBRARY
-FILE_PATH=/opt/Android/Sdk/extras/android/m2repository/com/android/support/test/espresso/espresso-idling-resource/2.2.2/espresso-idling-resource-2.2.2.aar
-FILE_SIZE=4917
-FILE_TIMESTAMP=1491244491000
