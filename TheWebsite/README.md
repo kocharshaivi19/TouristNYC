@@ -1,2 +1,0 @@
-# SUPERSECRETPROJECT
-Cat Bacon Sauce
