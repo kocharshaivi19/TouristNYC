@@ -1,0 +1,47 @@
+{% extends "header.html" %} {% block title %}EXPLORATION{% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block body %}
+
+<body>
+<div class="navbar-wrapper">
+      <div class="container">
+
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+	        <a class="navbar-brand" href="{{ url_for('explore') }}">Tourist NYC</a>
+                <li class="active"><a href="{{ url_for('explore') }}">EXPLORE</a></li>
+                <li class=""><a href="{{ url_for('profile') }}">PROFILE</a></li>
+                <li class=""><a href="{{ url_for('trips') }}">TRIPS</a></li>
+                <li><a href="{{ url_for('events') }}">EVENTS</a></li>
+                <li><a href="{{ url_for('groups') }}">GROUPS</a></li>
+
+		<!-- <li><a href="{{ url_for('login') }}" style="margin-left: 40em">LOGIN</a></li> -->
+                {% if not username %}
+                  <li><a href="{{ url_for('login') }}" style="margin-left: 35em">LOGIN</a></li>
+                {% else %}
+                  <li><a href="{{ url_for('logout') }}" style="margin-left: 33.5em">LOG OUT</a></li>
+                {% endif %}
+
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+      </div>
+    </div>
+    {{ super() }}
+</body>
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
