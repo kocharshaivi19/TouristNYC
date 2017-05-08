@@ -21,11 +21,10 @@
 	        <a class="navbar-brand" href="{{ url_for('explore') }}">Tourist NYC</a>
                 <li class="active"><a href="{{ url_for('explore') }}">EXPLORE</a></li>
                 <li class=""><a href="{{ url_for('profile') }}">PROFILE</a></li>
-                <li class=""><a href="{{ url_for('trips') }}">TRIPS</a></li>
-                <li><a href="{{ url_for('events') }}">EVENTS</a></li>
+                <li class=""><a href="{{ url_for('trips', group='none') }}">TRIPS</a></li>
+                <li><a href="{{ url_for('events', group='none') }}">EVENTS</a></li>
                 <li><a href="{{ url_for('groups') }}">GROUPS</a></li>
 
-		<!-- <li><a href="{{ url_for('login') }}" style="margin-left: 40em">LOGIN</a></li> -->
                 {% if not username %}
                   <li><a href="{{ url_for('login') }}" style="margin-left: 35em">LOGIN</a></li>
                 {% else %}

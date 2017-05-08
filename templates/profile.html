@@ -29,8 +29,8 @@
             <a class="navbar-brand" href="{{ url_for('explore') }}">Tourist NYC</a>
             <li><a href="{{ url_for('explore') }}">EXPLORE</a></li>
             <li class="active"><a href="{{ url_for('profile') }}">PROFILE</a></li>
-            <li><a href="{{ url_for('trips') }}">TRIPS</a></li>
-            <li><a href="{{ url_for('events') }}">EVENTS</a></li>
+            <li><a href="{{ url_for('trips', group='none') }}">TRIPS</a></li>
+            <li><a href="{{ url_for('events', group='none') }}">EVENTS</a></li>
             <li><a href="{{ url_for('groups') }}">GROUPS</a></li>
             
             <li><a href="{{ url_for('logout') }}" style="margin-left: 33.5em">LOG OUT</a></li>
@@ -66,10 +66,15 @@
 
           <!-- File Button --> 
           <div class="form-group">
-            <label class="col-md-4 control-label" for="Upload photo">Upload photo</label>
+            <label class="col-md-4 control-label" for="Upload Photo">Profile Picture</label>  
             <div class="col-md-4">
-              <input id="Upload photo" name="Upload photo" class="input-file" type="file">
-            </div>
+              <div class="input-group">
+                 <div class="input-group-addon">
+                  <i class="fa fa-user"></i>
+                 </div>
+                 <input id="Upload Photo" name="Upload Photo" type="text" placeholder="Upload Picture URL" class="form-control input-md" value="{{account[9]}}">
+              </div>    
+            </div> 
           </div>
 
           <!-- Text input-->
@@ -116,7 +121,7 @@
                  <div class="input-group-addon">
                <i class="fa fa-birthday-cake"></i>        
                  </div>
-                 <input id="PIN" name="PIN" value="{{ account[3] }}" type="password" placeholder="Enter PIN" class="form-control input-md">
+                 <input id="PIN" name="PIN" value="{{ account[4] }}" type="password" placeholder="Enter PIN" class="form-control input-md">
                 </div>    
             </div>
           </div>
@@ -130,7 +135,7 @@
                <i class="fa fa-phone"></i>
                   
                  </div>
-              <input value="{{ account[4] }}" id="Phone number " name="Phone number " type="tel" placeholder="Primary Phone number " class="form-control input-md">
+              <input value="{{ account[5] }}" id="Phone number " name="Phone number " type="tel" placeholder="Primary Phone number " class="form-control input-md">
               
                 </div>
                 <div class="input-group othertop">
@@ -151,7 +156,7 @@
                  <div class="input-group-addon">
                <i class="fa fa-birthday-cake"></i>        
                  </div>
-                 <input id="Date Of Birth" value="{{ account[5] }}" name="Date Of Birth" type="date" placeholder="Date Of Birth" class="form-control input-md">
+                 <input id="Date Of Birth" value="{{ account[6] }}" name="Date Of Birth" type="date" placeholder="Date Of Birth" class="form-control input-md">
                 </div>    
             </div>
           </div>
@@ -251,7 +256,7 @@
     </div>
 
     <div class="col-md-2 hidden-xs">
-      <img src="http://websamplenow.com/30/userprofile/images/avatar.jpg" class="img-responsive img-thumbnail ">
+      <img src="{{account[9]}}" class="img-responsive img-thumbnail" height="170px" width="170px">
     </div>
 
 

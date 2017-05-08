@@ -4,6 +4,16 @@
 {{ super() }} 
 <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename= 'css/trips.css') }}" /> -->
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename= 'css/events.css') }}" />
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<style>
+  html { 
+      background: url('http://wallpapercave.com/wp/TSlZ57J.jpg') no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+  }
+</style>
 {% endblock %}
 {% block body %}
 
@@ -25,8 +35,8 @@
               <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('explore') }}">EXPLORE</a></li>
                 <li><a href="{{ url_for('profile') }}">PROFILE</a></li>
-                <li class="active"><a href="{{ url_for('trips') }}">TRIPS</a></li>
-                <li><a href="{{ url_for('events') }}">EVENTS</a></li>
+                <li class="active"><a href="{{ url_for('trips', group='none') }}">TRIPS</a></li>
+                <li><a href="{{ url_for('events', group='none') }}">EVENTS</a></li>
                 <li><a href="{{ url_for('groups') }}">GROUPS</a></li>
 
                 {% if not username %}
@@ -50,15 +60,24 @@
             
             {% for interest in destinations %}
               <li>
-                <img src={{ interest[5] }} />
-                <div class="info">
-                  <h2 class="title">{{ interest[6] }}</h2>
+                <img alt={{ interest[6] }} src={{ interest[5] }} />
+                <div class="info" data-url={{interest[7]}}>                  
+                  <h2 class="title">{{ interest[6].replace("_", " ") }}<img src = {{interest[11]}}></img></h2>
                    <p class="desc">
+                    {% set address = interest[9].split('_') %}
+                    {% for addressline in address %}
+                      {{addressline.replace("-", " ")}}<br>
+                    {% endfor %}
+                    {{interest[10]}}
                   </p>
                 </div>
                 <div class="social" style="height: 100%">
                   <ul style="width:33%; height: 100%">
-                    <li class="google-plus" style="width:33%; height: 150px"></li>
+                    <li class="google-plus" style="width:33%; height: 150px">
+                      <a data-url={{interest[7]}} class="removeFromTrips" style="height: 150px">
+                        <span class="fa fa-minus"></span>
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </li>
@@ -70,11 +89,37 @@
 
 <nav aria-label="..." style="text-align: center">
   <ul class="pagination pagination-lg">
-    {% for i in range(0, tripsList|length)%}    
-    <li class="page-item"><a class="page-link" href="/trips/{{i+1}}">{{i+1}}</a></li>
+    {% for i in range(0, tripsList|length)%} 
+    {% set pathlist=request.path[:-1] %} 
+    <li><a href="{{pathlist}}{{i+1}}">{{i+1}}</a></li>
     {% endfor %}
   </ul>
 </nav>
+
+<script>
+      $('.removeFromTrips').each(function(){
+          $(this).click(function(){
+              console.log($(this).data());
+              $.post("/removeTrip", $(this).data());
+              setTimeout(function(){
+                var url = location.href.split("/");
+                var i, newUrl="";
+                for (i=0; i<5; i++) {
+                  newUrl+=url[i]+"/";
+                }
+                newUrl+="1";
+                location.href = newUrl;
+              },300);               
+          });
+      });
+
+      $('.info').each(function(){
+          $(this).css("cursor", "pointer");
+          $(this).click(function(){
+              window.open($(this).data().url);  
+          });
+      });
+</script>
 
 {% endblock %}
 {% block footer %} {{ super() }} {% endblock %}

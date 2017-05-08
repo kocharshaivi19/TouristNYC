@@ -5,15 +5,7 @@
 		padding: 60px 0px;
 		background-color: transparent;
 	}
-
-	html { 
-	    background: url('http://wallpapercave.com/wp/TSlZ57J.jpg') no-repeat center center fixed; 
-	    -webkit-background-size: cover;
-	    -moz-background-size: cover;
-	    -o-background-size: cover;
-	    background-size: cover;
-	}
-    
+ 
     .event-list {
 		list-style: none;
 		font-family: 'Lato', sans-serif;
@@ -200,4 +192,17 @@
 			width: 40px;
 			padding: 10px 0px 9px;
 		}
+	}
+
+	#mygroups {
+    background-color: white;
+    color: #337ab7;
+	}
+
+	.groupHeader {
+
+		text-align: center; 
+		background-color:rgb(221, 75, 57); 
+		color: white; 
+		padding: 5px 0;
 	}

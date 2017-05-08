@@ -5,9 +5,12 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename= 'css/events.css') }}" />
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <style>
-  body  {
-
-    background: url(http://cdn.pcwallart.com/images/new-york-city-skyline-at-night-hd-wallpaper-4.jpg) no-repeat center center fixed;
+  html {       
+      background: url('http://cdn.pcwallart.com/images/new-york-city-skyline-at-night-hd-wallpaper-4.jpg') no-repeat center center fixed;  
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
   }
 </style>
 {% endblock %}
@@ -31,8 +34,8 @@
               <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('explore') }}">EXPLORE</a></li>
                 <li><a href="{{ url_for('profile') }}">PROFILE</a></li>
-                <li><a href="{{ url_for('trips') }}">TRIPS</a></li>
-                <li class="active"><a href="{{ url_for('events') }}">EVENTS</a></li>
+                <li><a href="{{ url_for('trips', group='none') }}">TRIPS</a></li>
+                <li class="active"><a href="{{ url_for('events', group='none') }}">EVENTS</a></li>
                 <li><a href="{{ url_for('groups') }}">GROUPS</a></li>
 
                 {% if not username %}
@@ -46,7 +49,7 @@
         </nav>
 
       </div>
-    </div>
+</div>
 
     <div class="container" style="margin-top: 5em">
       <div class="row">
@@ -56,7 +59,7 @@
             {% for business in eventstoshow %}
               <li>
                 <img alt={{ business.name }} src={{ business.image_url }} />
-                <div class="info">
+                <div class="info" data-url={{business.url}}>
                   <h2 class="title">{{ business.name }} <img src = {{business.ratingPicture}}></img></h2>
                    <p class="desc">
                     {% for line in business.location.display_address %}
@@ -67,7 +70,7 @@
                 </div>
                 <div class="social" style="height: 100%">
                   <ul style="width:33%; height: 100%">
-                    <li class="google-plus" style="width:33%; height: 150px">
+                    <li class="facebook" style="width:33%; height: 150px">
                       <a  data-id= {{business.id}}
                           data-lat={{business.coordinates.latitude}}
                           data-long={{business.coordinates.longitude}}
@@ -75,7 +78,9 @@
                           data-name={{business.underScoredName}}
                           data-rating={{business.rating}}
                           data-phone={{business.phone}}
-                          data-address={{business.location.display_address}}
+                          data-address={{business.underScoredAddress}}
+                          data-url={{business.url}}
+                          data-ratingphoto={{business.ratingPicture}}
                           class="addToTrips" style="height: 150px">
                         <span class="fa fa-plus"></span>
                       </a>
@@ -91,8 +96,9 @@
 
     <nav aria-label="..." style="text-align: center">
       <ul class="pagination pagination-lg">
-        {% for i in range(0, events|length)%}    
-        <li class="page-item"><a class="page-link" href="/events/{{i+1}}">{{i+1}}</a></li>
+        {% for i in range(0, events|length)%} 
+        {% set pathlist=request.path[:-1] %} 
+        <li><a href="{{pathlist}}{{i+1}}">{{i+1}}</a></li>
         {% endfor %}
       </ul>
     </nav>
@@ -101,9 +107,15 @@
     <script>
       $('.addToTrips').each(function(){
           $(this).click(function(){
-              console.log($(this).data());
-              $.post("/addEvent", $(this).data());
-              // $('#description_'+$(this).attr('id')).toggle();
+              var url = "/addEvent/"+location.href.split("/")[4];
+              $.post(url, $(this).data());
+          });
+      });
+
+      $('.info').each(function(){
+          $(this).css("cursor", "pointer");
+          $(this).click(function(){
+              window.open($(this).data().url);  
           });
       });
     </script>

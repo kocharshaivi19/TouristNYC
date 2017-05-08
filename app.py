@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for,request,flash
+from flask import Flask, render_template, session, redirect, url_for,request,flash, jsonify
 import hashlib
 import string
 import random
@@ -52,11 +52,14 @@ def editprofile():
         sports = request.form.get('Sports', 0)
         parks = request.form.get('Parks', 0)
 
+        photo = request.form.get('Upload Photo', 0)
+
         conn = sqlite3.connect('users.db')
         c = conn.cursor()
         username = session['username']
 
         c.execute(""" UPDATE interests SET history = ?, art = ?, music = ?, theater = ?, shopping = ?, food = ?, sports = ?, parks = ? WHERE username = ?""", (history,art,music,theater,shopping,food,sports,parks,username))
+        c.execute("""UPDATE user SET picture=? WHERE username=?""", (photo, username))
         conn.commit()
         conn.close()
     return redirect(url_for('explore'))
@@ -84,14 +87,17 @@ def groups():
     return render_template("group.html", username=None)
 
 
-@app.route("/trips",methods=['GET'])
-def trips():
+@app.route("/trips/<group>/1",methods=['GET'])
+def trips(group):
     if 'username' in session:
         conn = sqlite3.connect('users.db')
         c = conn.cursor()
-        c.execute("""SELECT * FROM trips WHERE username= ?""",(session['username'],))
+        dest=[]
+        if (group=="none"):
+            c.execute("""SELECT * FROM trips WHERE username= ?""",(session['username'],))
+        else:
+            c.execute("""SELECT * FROM trips WHERE username= ?""", (group,))
         dest = c.fetchall()
-        print dest
         tripsGroupped[:]=[]
         for i in range (0, int(math.ceil(float(len(dest))/float(5)))):
             smallList=[]
@@ -101,17 +107,19 @@ def trips():
                 j+=1
             if len(smallList)!=0:
                 tripsGroupped.insert(i, smallList)
+        if len(tripsGroupped)==0:
+            return render_template("trips.html", username=session['username'], destinations = [], tripsList=[])
 
         return render_template("trips.html", username=session['username'], destinations=tripsGroupped[0], tripsList=tripsGroupped)
     flash('Please login to view your trip information!', 'error')
     return redirect(url_for('login'))
 
-@app.route("/trips/<page>",methods=['GET'])
-def pageNumber(page):
+@app.route("/trips/<groups>/<page>",methods=['GET'])
+def pageNumber(groups, page):
     if 'username' in session:
         if len(tripsGroupped)!=0:
             return render_template("trips.html", username=session['username'], destinations=tripsGroupped[int(page)-1],tripsList=tripsGroupped)
-        return redirect(url_for('trips'))
+        return redirect(url_for('trips', group=groups))
     flash('Please log in to view your trip information!', 'error')
     return redirect(url_for('login'))
 
@@ -123,13 +131,25 @@ def itinerary():
     return redirect(url_for('login'))
 
 
-@app.route("/events",methods=['GET'])
-def events():
+@app.route("/events/<group>/1",methods=['GET'])
+def events(group):
     if 'username' in session:
         conn = sqlite3.connect('users.db')
         c = conn.cursor()
-        c.execute("""SELECT * FROM interests WHERE username= ?""",(session['username'],))
-        interests = c.fetchone()
+        interests=[1, 1, 1, 1, 1, 1, 1, 1, 1]
+        if (group=='none'):
+            c.execute("""SELECT * FROM interests WHERE username= ?""",(session['username'],))
+            interests = c.fetchone()
+        else:
+            c.execute("""SELECT members FROM groups WHERE groupname= ?""", (group,))
+            groupmembers=c.fetchone()[0].split(",")[1:-1]
+            for i in range(len(groupmembers)):
+                c.execute("""SELECT username FROM user WHERE user=?""", (groupmembers[i],))
+                username=c.fetchone()[0]
+                c.execute("""SELECT * FROM interests WHERE username= ?""", (username,))
+                personalInterests=c.fetchone()
+                for j in range(1, len(personalInterests)):
+                    interests[j] = interests[j] and personalInterests[j]
         categories = ""
         if interests[1] or interests[2] or interests[3] or interests[4] or interests[5] or interests[6] or interests[7] or interests[8]:
             categories = "&categories="
@@ -156,6 +176,8 @@ def events():
         for business in r["businesses"]:
             business['underScoredName'] = business['name'].replace(" ", "_")
             business['ratingPicture'] = stars[str(business['rating'])]
+            business['underScoredAddress'] = ("_").join(business["location"]["display_address"])
+            business['underScoredAddress']=business['underScoredAddress'].replace(" ", "-")
 
         businesses[:] = []
         for i in range(0, int(math.ceil(float(len(r["businesses"])) / 5))):
@@ -167,28 +189,43 @@ def events():
             if len(smallList)!=0:
                 businesses.insert(i, smallList)
 
+        if len(businesses)==0:
+            return render_template("events.html", username=session['username'], eventstoshow = [], events=[])
         return render_template("events.html", username=session['username'], eventstoshow = businesses[0], events=businesses)
     flash('Please log in to view suggested events!','error')
     return redirect(url_for('login'))
 
-@app.route("/events/<page>",methods=['GET'])
-def eventsPageNumber(page):
+@app.route("/events/<groups>/<page>",methods=['GET'])
+def eventsPageNumber(groups, page):
     if 'username' in session:
         if len(businesses)!=0:
             return render_template("events.html", username=session['username'], eventstoshow=businesses[int(page)-1], events=businesses)
-        return redirect(url_for('events'))
+        return redirect(url_for('events', group=groups))
     flash('Please log in to view suggested events!', 'error')
     return redirect(url_for('login'))
 
-@app.route("/addEvent",methods=['POST'])
-def addEvent():
-    # print request.form
+@app.route("/addEvent/<group>",methods=['POST'])
+def addEvent(group):
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
-    c.execute(""" INSERT INTO trips VALUES(?,?,?,?,?,?,?)""", (session['username'], request.form["id"], 0, request.form["lat"], request.form["long"], request.form["image"], request.form["name"]))
+    if (group!="none"):
+        username = group
+    else:
+        username = session['username']
+    c.execute(""" INSERT INTO trips VALUES(?,?,?,?,?,?,?,?,?,?,?,?)""", (username, request.form["id"], 0, request.form["lat"], request.form["long"], request.form["image"], request.form["name"], request.form["url"], request.form["rating"], request.form["address"], request.form["phone"], request.form["ratingphoto"]))
     conn.commit()
     conn.close()
     return 'successful'
+
+@app.route('/removeTrip',methods=['POST'])
+def removeTrip():
+    # print request.form
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute("""DELETE FROM trips WHERE url=?""", (request.form["url"],))
+    conn.commit()
+    conn.close()
+    return "successful"
 
 
 @app.route('/signup',methods=['GET','POST'])
@@ -218,8 +255,10 @@ def signup():
                 flash('Password do not match!','error')
                 return redirect(url_for('signup'))
 
+            user=username.split("@")[0]
+            picture="http://websamplenow.com/30/userprofile/images/avatar.jpg"
             
-            c.execute(""" INSERT INTO user VALUES(NULL,?,?,?,?,?,?,?)""",(username,password,pin,tel,birth,country,gender))
+            c.execute(""" INSERT INTO user VALUES(NULL,?,?,?,?,?,?,?,?,?)""",(username,user,password,pin,tel,birth,country,gender,picture))
             c.execute(""" INSERT INTO interests VALUES(?,?,?,?,?,?,?,?,?)""",(username,0,0,0,0,0,0,0,0))
             conn.commit()
             conn.close()
@@ -230,10 +269,7 @@ def signup():
             return redirect(url_for('signup'))
         
         
-    return render_template('signup.html',username=None)           
-
-
-
+    return render_template('signup.html',username=None)
 
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -269,12 +305,58 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('explore'))
 
+@app.route("/search",methods=['POST'])
+def search():
+    searchuser = request.form.keys()[0]
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute(" SELECT user, picture FROM user WHERE user LIKE ?", (searchuser+'%',))
+    found = c.fetchall()
+    foundusers=[{"username": found[i][0], "picture":found[i][1]} for i in range(0, len(found))]
+    conn.commit()
+    conn.close()
+    return jsonify(foundusers)
 
+@app.route("/myGroups",methods=['GET'])
+def myGroups():
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute("""SELECT user FROM user WHERE username=?""", (session['username'],))
+    username = c.fetchone()[0]
+    c.execute("""SELECT * FROM groups WHERE members LIKE ?""", ("%,"+username+",%",))
+    found = c.fetchall()
+    groupslist=[]
+    for i in range(len(found)):
+        newlist=found[i][1].split(",")[1:-1]
+        listofusers=[]
+        for j in range (len(newlist)):
+            c.execute("""SELECT picture FROM user WHERE user=?""", (newlist[j],))
+            image = c.fetchone()
+            listofusers.append([newlist[j], image])
+        groupslist.append(listofusers)
+
+    foundgroups=[{"group": found[i][0], "members":groupslist[i]} for i in range(0, len(found))]
+    conn.commit()
+    conn.close()
+    return jsonify(foundgroups)
+
+@app.route("/createGroup",methods=['POST'])
+def createGroup():
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    print request.form.keys()[0]
+    output=request.form.keys()[0].split(";")
+    groupname=output[0]
+    users=output[1]
+    c.execute(""" INSERT INTO groups VALUES(?,?)""", (groupname, users,))
+    conn.commit()
+    conn.close()
+    return "Success"
 
 # TODO
 # figure out how to connect SQL to Flask
 # write out ER diagram thing
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5010))
-    app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 5100))
+    app.run(host='localhost', port=port)

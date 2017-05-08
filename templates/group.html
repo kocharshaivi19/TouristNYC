@@ -1,7 +1,20 @@
 {% extends "header.html" %}
 {% block title %}GROUPS{% endblock %}
-{% block head %} {{ super() }} {% endblock %}
-{% block body %}
+{% block head %} 
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename= 'css/events.css') }}" />
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<style>
+  html { 
+      background: url(http://silicon.nyc/wp-content/uploads/2016/05/new-york-skyline-.jpg) no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+  }
+</style>
+{% endblock %}
+{% block body %} 
 
 <div class="navbar-wrapper">
       <div class="container">
@@ -21,22 +34,9 @@
               <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('explore') }}">EXPLORE</a></li>
                 <li><a href="{{ url_for('profile') }}">PROFILE</a></li>
-                <li><a href="{{ url_for('trips') }}">TRIPS</a></li>
-                <li><a href="{{ url_for('events') }}">EVENTS</a></li>
+                <li><a href="{{ url_for('trips', group='none') }}">TRIPS</a></li>
+                <li><a href="{{ url_for('events', group='none') }}">EVENTS</a></li>
                 <li class="active"><a href="{{ url_for('groups') }}">GROUPS</a></li>
-
-                <!-- <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MORE<span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Advisor</li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>
-                  </ul>
-                </li> -->
 
                 {% if not username %}
                   <li><a href="{{ url_for('login') }}" style="margin-left: 40em">LOGIN</a></li>
@@ -49,52 +49,10 @@
         </nav>
 
       </div>
-    </div>
-
-<div class="container" style="margin-top: 10em">
-  <div class="row">
-    <div class="row"> 
-        <div class="col-xs-12 col-sm-3 col-md-3">
-            <a href="#">
-                <img src="http://cdn1.listovative.com/wp-content/uploads/2016/03/547301-b1566610-773e-11e3-98ae-18260220474f.jpg" class="img-responsive img-box img-thumbnail"> 
-            </a>
-        </div> 
-        <div class="col-xs-12 col-sm-9 col-md-9">
-            <h4><a href="#">Friends</a></h4>
-            <h5>Members</h5>
-            <ul>
-              <li>Anna Brown (ab123)</li>
-              <li>Casey Donaldson (cd456)</li>
-              <li>Elena Fisher (ef789)</li>
-            </ul>
-        </div> 
-    </div>
-    <hr>
-
-    <div class="row"> 
-        <div class="col-xs-12 col-sm-3 col-md-3">
-            <a href="#">
-                <img src="https://s-media-cache-ak0.pinimg.com/originals/d6/3c/c4/d63cc434aec33221210259f785c8e380.jpg" class="img-responsive img-box img-thumbnail"> 
-            </a>
-        </div> 
-        <div class="col-xs-12 col-sm-9 col-md-9">
-            <h4><a href="#">Family</a></h4>
-            <h5>Members</h5>
-            <ul>
-              <li>Anna Brown (ab123)</li>
-              <li>Ciara Brown (cb456)</li>
-              <li>Darren Brown (db789)</li>
-            </ul>
-        </div> 
-    </div>
-    <hr>
-
-<p align="center"><a class="btn btn-lg btn-primary" data-toggle="modal" data-target="#myModal" role="button">CREATE NEW GROUP</a></p>
 </div>
 
-<div class="container">
+    <div class="container">
     <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -111,39 +69,159 @@
                                     <i class="fa fa-user">
                                     </i>
                                    </div>
-                                   <input id="newgroupname" name="newgroupname" type="text" placeholder="Enter group name" class="form-control input-md">
+                                   <input id="newgroupname" name="newgroupname" type="text" style="width: 150px" placeholder="Enter group name" class="form-control input-md" required>
                                 </div>    
                               </div> 
                             </div>
                             <div class="form-group"> 
-                              <h5 style="margin-left: 15px"> Add Users: </h5> <!-- Can't get label to work properly here. -->
+                              <h5 style="margin-left: 15px"> Search Users to Add: </h5>
                               <div class="col-md-4">                                
                                 <div class="input-group">
+                                  <input type="search" style="height: 30px" id="userSearch" name="userSearch">
                                    <div class="input-group-addon">
-                                    <i class="fa fa-user">
+                                    <i class="fa fa-search" id="searchUser">
                                     </i>
-                                   </div>
-
-                                   <select id="addusers" name="addusers">
-                                    <option selected></option>
-                                    <option value="bla">Dynamically populate with registered users as the user types.</option>
-                                  </select>
+                                   </div>                                   
                                 </div>    
                               </div> 
                             </div>
+                            <div style="display: none; text-align: center" id="usersheading"><h4>Found Users:</h4></div>
+                            <div id="users"></div>
+                            <div style="text-align: center" id="addedusersheading"><h4>Added Users:</h4></div>
+                            <div id="addedusers"></div>
                         </fieldset>
+                        <div class="modal-footer">
+                          <center>
+                          <input type="button" class="btn btn-success" value="Create" id="create"></input>
+                          <input type="reset" class="btn btn-default" value="Reset" id="reset"></input>
+                          </center>
+                      </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <center>
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Create</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </center>
+            </div>
+        </div>
+</div>
+
+<p align="center"><a class="btn btn-lg btn-primary" id="mygroups" data-toggle="modal" data-target="#myModal" role="button">MY GROUPS</a></p>
+
+ <div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title" id="myModalLabel" align="center">My Groups</h4>
+                    </div>
+                <div class="modal-body" id="mygroupsBody">
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+    <script>
+
+      $(document).on('mouseover', "a.addToTrips, a.removeFromTrips", function() {
+          $(this).css("cursor", "pointer");        
+      });
+
+      $(document).on('mouseover', "i#searchUser", function()  {
+
+          $(this).css("cursor", "pointer");
+          $(this).prop('title', "Search")
+      });
+
+      $(document).on('mouseover', "i#searchasGroup",  function()  {
+
+          $(this).css("cursor", "pointer");
+          $(this).prop('title', "Search as a member of this group")
+      });
+
+      $(document).on('mouseover', "i#viewGroupTrips", function()  {
+
+          $(this).css("cursor", "pointer");
+          $(this).prop('title', "View trips for this group")
+      });
+
+      $(document).on('click', "a.addToTrips", function() {
+          var string=$(addedusers).html();
+          string+="<h5 id="+$(this).data().username+"><img src="+$(this).data().picture+" width=\"35px\" height=\"35px\"></img>&nbsp"+$(this).data().username+"&nbsp&nbsp<a class='removeFromTrips' data-username="+$(this).data().username+" style='color:rgb(221, 75, 57);'><span class='fa fa-minus'></span></a></h5>";
+          $(addedusers).html(string);     
+      });
+
+      $(document).on('click', "a.removeFromTrips", function() {
+          var username=$(this).data().username;
+          console.log(username);
+          $("#"+username).remove();     
+      });
+
+      $('#searchUser').click(function(){
+
+        if (!$(userSearch).val()) return;
+        $.post("/search", $(userSearch).val())
+        .done(function(object)  {
+
+          $(usersheading).show();
+          var string="";
+          for (user in object)   {
+
+            string+="<h5><img src="+object[user]['picture']+" width=\"35px\" height=\"35px\"></img>&nbsp"+object[user]['username']+"&nbsp&nbsp<a class='addToTrips' data-username="+object[user]['username']+" data-picture="+object[user]['picture']+"><span class='fa fa-plus'></span></a></h5>";
+            $(users).html(string);
+          }         
+        })
+        .fail(function() {
+        $(users).text("No results found");
+       });
+      });
+
+      $('#cancel, #reset').click(function(){
+
+        $(users).html("");
+        $(usersheading).hide();
+        $(addedusers).html("");
+      });
+
+      $('#create').click(function(){
+
+        var members=",";
+        $("#addedusers").find("h5").each(function() {
+          members+=$(this).attr('id')+",";
+        });
+        $.post("/createGroup", $("#newgroupname").val()+";"+members);
+      });
+
+      $('#mygroups').click(function(){
+
+        $.get("/myGroups").done(function(object)  {
+
+          var string="";
+          for (num in object)   {
+
+            string+="<h4 class='groupHeader'>"+object[num]['group']+"&nbsp&nbsp<i class='fa fa-search' id='searchasGroup' data-groupname="+object[num]['group']+"></i>&nbsp&nbsp<i class='fa fa-calendar-o' id='viewGroupTrips' data-groupname="+object[num]['group']+"></i></h4>";
+            var i;
+            for (i=0; i<object[num]['members'].length; i++) {
+
+              string+="<h3><img src="+object[num]['members'][i][1]+" width=\"50px\" height=\"50px\"></img>&nbsp"+object[num]['members'][i][0]+"&nbsp&nbsp<a class='addToTrips' data-username="+object[num]['members'][i][0]+" data-picture="+object[num]['members'][i][1]+"></a></h3>";
+            }
+          }  
+          $(mygroupsBody).html(string);
+        }).fail(function() {
+        $(mygroupsBody).text("No groups found");
+       });
+      });
+
+      $(document).on('click', "i#searchasGroup", function() {
+          
+          location.href="/events/"+$(this).data().groupname+"/1";
+      });
+
+      $(document).on('click', "i#viewGroupTrips", function() {
+          
+          location.href="/trips/"+$(this).data().groupname+"/1";
+      });
+
+    </script>
 
 {% endblock %}
 {% block footer %} {{ super() }} {% endblock %}
